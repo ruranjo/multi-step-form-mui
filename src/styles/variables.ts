@@ -16,6 +16,7 @@ export const lightGray: string = 'hsl(229, 24%, 87%)';
 export const magnolia: string = 'hsl(217, 100%, 97%)';
 export const alabaster: string = 'hsl(231, 100%, 99%)';
 export const white: string = 'hsl(0, 0%, 100%)';
+export const black: string = 'hsl(0, 0%, 0%)';
 
 // Typography
 // Body Copy

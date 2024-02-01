@@ -1,8 +1,10 @@
 import { SxProps, Typography } from '@mui/material';
 import './App.css'
 import { Box, Container } from '@mui/system';
-import { alabaster, coolGray, magnolia, marineBlue, purplishBlue, white } from './styles/variables';
+import { alabaster,black, pastelBlue, white } from './styles/variables';
 import { bgSidebarDesktop } from './utils/assets';
+import { useState } from 'react';
+import { StepPersonalInformation } from './pages/Steps';
 
   
 export interface styledMultiStepForm {
@@ -32,10 +34,10 @@ const appStyle: styledMultiStepForm = {
       display: 'flex',
       justifyContent:'space-between',
       width:'70%',
-      minWidth:'600px',
+      minWidth:'500px',
       height:'70%',
       border:'1px solid red',
-      backgroundColor: coolGray,
+      backgroundColor: alabaster,
       '@media screen and (max-width: 440px)': {
         flexDirection:'column'
       },
@@ -75,7 +77,6 @@ const appStyle: styledMultiStepForm = {
       width:'30px',
       height:'30px',
       color:white,
-      
     },
     steps:{
       border:'1px solid tomato',
@@ -104,7 +105,7 @@ const appStyle: styledMultiStepForm = {
   ]
 
 const App:React.FC<{}> = () => {
-
+  const [currentStep, setCurrentStep]  = useState(progressSteps[0].stepNumber)
   return (
     <>
       <Container maxWidth={false}  sx={appStyle.containerStyle}>
@@ -115,7 +116,7 @@ const App:React.FC<{}> = () => {
               progressSteps.map((step,index)=>{
                 return (
                   <Box sx={appStyle.sidebarBox} key={index}>
-                    <Box sx={appStyle.iconNumberSidebar}>
+                    <Box sx={ currentStep === step.stepNumber ? {...appStyle.iconNumberSidebar, color: black, backgroundColor: pastelBlue} : appStyle.iconNumberSidebar}>
                       <Typography variant='body2' fontWeight={'600'} color={'inherit'}>{step.stepNumber}</Typography>
                     </Box>
                     <Box color={'inherit'}>
@@ -129,7 +130,9 @@ const App:React.FC<{}> = () => {
             </Box>  
           </Box>
           <Box sx={appStyle.steps}>
-
+            {
+              currentStep === progressSteps[0].stepNumber && <StepPersonalInformation/>
+            }
           </Box>
         </Box>
       </Container>
