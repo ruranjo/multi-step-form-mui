@@ -7,6 +7,16 @@ import { white } from "../../styles/variables";
         default: white, // Color de fondo personalizado
       },
     },
+    components: {
+      MuiTextField: {
+        styleOverrides: {
+          root: {
+            // Estilos del TextField
+          },
+          
+        },
+      },
+    },
 });
 
 export default theme;

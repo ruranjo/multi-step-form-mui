@@ -4,7 +4,7 @@ import { Box, Container } from '@mui/system';
 import { alabaster,black, pastelBlue, white } from './styles/variables';
 import { bgSidebarDesktop } from './utils/assets';
 import { useState } from 'react';
-import { StepPersonalInformation } from './pages/Steps';
+import { StepPersonalInformation, StepSelectYourPlan, StepFinishingUp, StepPickAddOns} from './pages/Steps';
 
   
 export interface styledMultiStepForm {
@@ -131,7 +131,16 @@ const App:React.FC<{}> = () => {
           </Box>
           <Box sx={appStyle.steps}>
             {
-              currentStep === progressSteps[0].stepNumber && <StepPersonalInformation/>
+              currentStep === progressSteps[0].stepNumber && <StepPersonalInformation setCurrentStep={setCurrentStep} />
+            }
+            {
+              currentStep === progressSteps[1].stepNumber && <StepSelectYourPlan setCurrentStep={setCurrentStep} />
+            }
+            {
+              currentStep === progressSteps[2].stepNumber && <StepPickAddOns setCurrentStep={setCurrentStep} />
+            }
+            {
+              currentStep === progressSteps[3].stepNumber && <StepFinishingUp setCurrentStep={setCurrentStep} />
             }
           </Box>
         </Box>

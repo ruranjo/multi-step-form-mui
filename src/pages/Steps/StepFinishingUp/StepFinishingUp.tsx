@@ -111,7 +111,7 @@ export interface Props {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>
 }
 
-const StepPersonalInfomation:React.FC<Props> = ({setCurrentStep}) => {
+const StepFinishingUp:React.FC<Props> = ({setCurrentStep}) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -173,5 +173,5 @@ const StepPersonalInfomation:React.FC<Props> = ({setCurrentStep}) => {
   )
 }
 
-export default StepPersonalInfomation
+export default StepFinishingUp
 
