@@ -1,10 +1,10 @@
 import { SxProps, Typography } from '@mui/material';
-import './App.css'
 import { Box, Container } from '@mui/system';
 import { alabaster,black, pastelBlue, white } from './styles/variables';
 import { bgSidebarDesktop } from './utils/assets';
 import { useState } from 'react';
 import { StepPersonalInformation, StepSelectYourPlan, StepFinishingUp, StepPickAddOns} from './pages/Steps';
+import { UserData } from './interfaces/userdata.inteface';
 
   
 export interface styledMultiStepForm {
@@ -103,9 +103,24 @@ const appStyle: styledMultiStepForm = {
       title:'SUMMARY',
     },
   ]
+ 
+
+  const initialStatUserData:UserData = {
+    name:"",
+    email:"",
+    phone:"",
+    quoteTime:'monthly',//montly or yearly
+    plan:'Arcade',//arcane, advenced, pro
+    hasOnlineService : false,
+    hasLargerStorage : false,
+    hasCustomizableProfile : false,
+  }
 
 const App:React.FC<{}> = () => {
-  const [currentStep, setCurrentStep]  = useState(progressSteps[0].stepNumber)
+  const [currentStep, setCurrentStep]  = useState(progressSteps[1].stepNumber);
+  
+  const [userData, setUserData]  = useState<UserData>(initialStatUserData); 
+
   return (
     <>
       <Container maxWidth={false}  sx={appStyle.containerStyle}>
@@ -131,13 +146,13 @@ const App:React.FC<{}> = () => {
           </Box>
           <Box sx={appStyle.steps}>
             {
-              currentStep === progressSteps[0].stepNumber && <StepPersonalInformation setCurrentStep={setCurrentStep} />
+              currentStep === progressSteps[0].stepNumber && <StepPersonalInformation setCurrentStep={setCurrentStep}  userData={userData} setUserData={setUserData}/>
             }
             {
-              currentStep === progressSteps[1].stepNumber && <StepSelectYourPlan setCurrentStep={setCurrentStep} />
+              currentStep === progressSteps[1].stepNumber && <StepSelectYourPlan setCurrentStep={setCurrentStep}  userData={userData} setUserData={setUserData}/>
             }
             {
-              currentStep === progressSteps[2].stepNumber && <StepPickAddOns setCurrentStep={setCurrentStep} />
+              currentStep === progressSteps[2].stepNumber && <StepPickAddOns setCurrentStep={setCurrentStep}  userData={userData} setUserData={setUserData} />
             }
             {
               currentStep === progressSteps[3].stepNumber && <StepFinishingUp setCurrentStep={setCurrentStep} />

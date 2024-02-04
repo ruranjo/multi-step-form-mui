@@ -1,6 +1,7 @@
 import { Box, Button, SxProps, TextField, Typography } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import { fontFamily, marineBlue, purplishBlue } from '../../../styles/variables';
+import { UserData } from '../../../interfaces/userdata.inteface';
 
 
 export interface styledStepPersonalInformation {
@@ -108,15 +109,35 @@ const stepPersonalInformationStyle: styledStepPersonalInformation = {
 
   
 export interface Props {
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  setUserData: React.Dispatch<React.SetStateAction<UserData>>;
+  userData: UserData;
 }
 
-const StepPersonalInfomation:React.FC<Props> = ({setCurrentStep}) => {
+const StepPersonalInfomation:React.FC<Props> = ({setCurrentStep, setUserData, userData}) => {
+  const [nameField, setNameField] = useState(userData.name);
+  const [emailField, setEmailField] = useState(userData.email);
+  const [phoneField, setPhoneField] = useState(userData.phone);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setUserData({...userData, name:nameField, email: emailField, phone: phoneField}) 
     setCurrentStep(2);
-    // Lógica para manejar la presentación del formulario
+
+  };
+
+  const handleNameChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    setNameField(event.target.value);
+  };
+
+  const handleGmailChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    setEmailField(event.target.value);
+  };
+
+  const handlePhoneChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    // Elimina cualquier carácter no numérico
+    const sanitizedInput = event.target.value.replace(/[^0-9+]/g, '');
+    setPhoneField(sanitizedInput);
   };
 
   return (
@@ -138,7 +159,10 @@ const StepPersonalInfomation:React.FC<Props> = ({setCurrentStep}) => {
           id="name-user"
           placeholder="e.g Stephen King"
           variant="outlined"
-          required 
+          required
+          value={nameField}
+          onChange={handleNameChange}
+          
         />
 
         <Typography sx={stepPersonalInformationStyle.label} variant='body2'>Email Address</Typography>
@@ -150,7 +174,10 @@ const StepPersonalInfomation:React.FC<Props> = ({setCurrentStep}) => {
           placeholder="e.g stephemking@lorem.com"
           variant="outlined"
           type="email"
-          required 
+          required
+          value={emailField}
+          onChange={handleGmailChange}
+          
         />
 
         <Typography sx={stepPersonalInformationStyle.label} variant='body2'>Phone Number</Typography>
@@ -163,6 +190,8 @@ const StepPersonalInfomation:React.FC<Props> = ({setCurrentStep}) => {
           variant="outlined"
           type='tel'
           required
+          value={phoneField}
+          onChange={handlePhoneChange}
         />  
       </Box>
       <Box sx={stepPersonalInformationStyle.buttonConteiner}>

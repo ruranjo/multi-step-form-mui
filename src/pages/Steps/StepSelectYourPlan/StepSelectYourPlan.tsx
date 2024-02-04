@@ -1,22 +1,25 @@
-import { Box, Button, SxProps, TextField, Typography } from '@mui/material'
-import React from 'react'
-import { fontFamily, marineBlue, purplishBlue } from '../../../styles/variables';
+import { Box, Button, Switch, SxProps, Typography } from '@mui/material'
+import React, { useState } from 'react'
+import { fontFamily, lightGray, magnolia, marineBlue, purplishBlue, white} from '../../../styles/variables';
+import { iconAdvanced, iconArcade, iconPro } from '../../../utils/assets';
+import { UserData } from '../../../interfaces/userdata.inteface';
+import { quoteTimeData } from '../../../utils/quoteTimeData';
 
 
-export interface styledStepPersonalInformation {
+export interface styledStepSelectYourPlan {
   mainBoxStyle: SxProps;
   headerTitle: SxProps;
   title: SxProps;
   subTitle: SxProps;
-  label: SxProps;
-  textInput: SxProps;
-  bottonContainer: SxProps;
-  InputProps:SxProps;
   buttonConteiner:SxProps;
-  button:SxProps;
+  buttonNext: SxProps;
+  buttonBack: SxProps;
+  cardPlansContainer:SxProps;
+  cardPlan:SxProps;
+  switchBox :SxProps;
 }
 
-const stepPersonalInformationStyle: styledStepPersonalInformation = {
+const StepSelectYourPlanStyle: styledStepSelectYourPlan = {
   mainBoxStyle:{
       
       display:'flex',
@@ -56,117 +59,198 @@ const stepPersonalInformationStyle: styledStepPersonalInformation = {
       '@media screen and (max-width: 870px)': {
       },
     },
-    bottonContainer:{
-      display:'flex',
-      flexDirection:'column',
-      gap:'0.5rem',
-    },
-    label:{
-      width:'80%',
-      color: marineBlue,
-      '@media screen and (max-width: 870px)': {
-      },
-    },
-    textInput:{
-      width:'80%',
-      '@media screen and (max-width: 870px)': {
-      },
-    },
-    InputProps:{
-      display:'flex',
-      height:'40px',
-      textAlign: 'center', 
-      
-      '&:focus-within': {
-        '& fieldset': {
-          borderColor: purplishBlue+' !important' , // Cambiar el color del borde al púrpura cuando está enfocado
-       
-        },
-        '& label': {
-          color: purplishBlue, // Color de la etiqueta (label)
-        },
-      },
-      
-       
-    },
     buttonConteiner:{
       
       display:'flex',
-      justifyContent:'flex-end',
+      justifyContent:'space-between',
       width:'80%',
       marginTop:'1rem'
       
     },
-    button:{
+    buttonNext:{
         marginTop:'3rem',
         backgroundColor: marineBlue + ' !important',
         textTransform: 'none',
         fontWeight:600,
         fontFamily:fontFamily,
+    },
+    buttonBack:{
+      marginTop:'3rem',
+      textTransform: 'none',
+      fontWeight:600,
+      color: 'gray !important',
+      fontFamily:fontFamily,
+  },
+    cardPlansContainer:{
+      marginTop:'2rem',
+      display:'flex',
+      width:'80%',
+      height:'50%',
+      justifyContent:'space-between',
+    },
+    cardPlan:{
+      paddingTop:'1rem',
+      paddingBottom:'1rem',
+      paddingLeft:'1rem',
+      border:'1px solid '+ lightGray,
+      borderRadius:'20px',
+      justifyContent:'space-between',
+      display:'flex',
+      flexDirection:'column',
+      width:'28%',
+      minWidth:'120px',
+      height: '100%',
+      cursor:'pointer'
+    },
+    switchBox:{
+      width:'80%',
+      background: magnolia,
+      display:'flex',
+      justifyContent:'center',
+      marginTop:'1rem'
     }
   }
 
   
 export interface Props {
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  setUserData: React.Dispatch<React.SetStateAction<UserData>>;
+  userData: UserData;
 }
 
-const StepSelectYourPlan:React.FC<Props> = ({setCurrentStep}) => {
+const StepSelectYourPlan:React.FC<Props> = ({setCurrentStep, userData, setUserData}) => {
+  const [checked, setChecked] = useState(!(userData.quoteTime === 'monthly'));
+  
+  let planCards = [
+    {
+      img: iconArcade,
+      title:'Arcade',
+      quotePerTime: userData.quoteTime === 'monthly' ? quoteTimeData.montly.arcade : quoteTimeData.yearly.arcade,
+    },
+    {
+      img: iconAdvanced,
+      title:'Advanced',
+      quotePerTime: userData.quoteTime === 'monthly' ? quoteTimeData.montly.advance : quoteTimeData.yearly.advance,
+    },
+    {
+      img: iconPro,
+      title:'Pro',
+      quotePerTime: userData.quoteTime === 'monthly' ? quoteTimeData.montly.pro : quoteTimeData.yearly.pro,
+    },
+  ]
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+    setUserData({...userData, quoteTime: checked ? 'monthly' : 'yearly' });
+    planCards = [
+      {
+        img: iconArcade,
+        title:'Arcade',
+        quotePerTime: userData.quoteTime === 'monthly' ? quoteTimeData.montly.arcade : quoteTimeData.yearly.arcade,
+      },
+      {
+        img: iconAdvanced,
+        title:'Advanced',
+        quotePerTime: userData.quoteTime === 'monthly' ? quoteTimeData.montly.advance : quoteTimeData.yearly.advance,
+      },
+      {
+        img: iconPro,
+        title:'Pro',
+        quotePerTime: userData.quoteTime === 'monthly' ? quoteTimeData.montly.pro : quoteTimeData.yearly.pro,
+      }
+    ]
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setCurrentStep(2);
+    setCurrentStep(3);
     // Lógica para manejar la presentación del formulario
   };
+
+  const toGoBack = () => {
+    setCurrentStep(1);
+    // Lógica para manejar la presentación del formulario
+  };
+
+  
+
+  const handleClick = (cardTitle:string) => {
+    setUserData({...userData, plan:cardTitle});
+    // Puedes realizar otras acciones aquí...
+  };
+
+ 
+
+
 
   return (
     
     <Box
-      sx={stepPersonalInformationStyle.mainBoxStyle} 
+      sx={StepSelectYourPlanStyle.mainBoxStyle} 
     >
       <form action="" onSubmit={handleSubmit}>
-      <Box sx={stepPersonalInformationStyle.headerTitle}>
-        <Typography sx={stepPersonalInformationStyle.title}  variant='h4'>Personal info</Typography>
-        <Typography sx={stepPersonalInformationStyle.subTitle} variant='body2' color={'inherit'}>Please provide your name, email address, and phone number</Typography>
-      </Box>
-      <Box sx={stepPersonalInformationStyle.bottonContainer} color={'inherit'}>
-        <Typography sx={stepPersonalInformationStyle.label} variant='body2'>Name</Typography>
-        <TextField 
-          sx={stepPersonalInformationStyle.textInput}
-          InputLabelProps={{ shrink: false }}
-          InputProps={{ sx: stepPersonalInformationStyle.InputProps}}
-          id="name-user"
-          placeholder="e.g Stephen King"
-          variant="outlined"
-          required 
-        />
+      <Box sx={StepSelectYourPlanStyle.headerTitle}>
+        <Typography sx={StepSelectYourPlanStyle.title}  variant='h4'>
+          Select your plan
+        </Typography>
 
-        <Typography sx={stepPersonalInformationStyle.label} variant='body2'>Email Address</Typography>
-        <TextField  
-          sx={stepPersonalInformationStyle.textInput}
-          InputLabelProps={{ shrink: false }}
-          InputProps={{sx: stepPersonalInformationStyle.InputProps}}
-          id="email-address-user"
-          placeholder="e.g stephemking@lorem.com"
-          variant="outlined"
-          type="email"
-          required 
-        />
-
-        <Typography sx={stepPersonalInformationStyle.label} variant='body2'>Phone Number</Typography>
-        <TextField 
-          sx={stepPersonalInformationStyle.textInput}
-          InputLabelProps={{ shrink: false }} 
-          InputProps={{sx: stepPersonalInformationStyle.InputProps}} 
-          id="phone-number-user"
-          placeholder="e.g +1 234 567 789" 
-          variant="outlined"
-          type='tel'
-          required
-        />  
+        <Typography sx={StepSelectYourPlanStyle.subTitle} variant='body2' color={'inherit'}>
+          You have the option of monthly or yearly billing
+        </Typography>
       </Box>
-      <Box sx={stepPersonalInformationStyle.buttonConteiner}>
-        <Button sx={stepPersonalInformationStyle.button} type="submit" variant='contained'>Next Step</Button>
+      
+      <Box sx={StepSelectYourPlanStyle.cardPlansContainer} color={'inherit'}>
+        {
+          planCards.map((card,index)=>{
+            
+            return (
+            <Box onClick={()=> handleClick(card.title)} sx={userData.plan === card.title ? {...StepSelectYourPlanStyle.cardPlan, border:'1px solid '+purplishBlue}: StepSelectYourPlanStyle.cardPlan} key={index} >
+              <Box>
+                <img src={card.img} alt={card.title} />
+              </Box>
+              <Box>
+                <Typography sx={{...StepSelectYourPlanStyle.title, fontSize:'20px'}}  variant='h4'>
+                  {card.title}
+                </Typography>
+                <Typography sx={StepSelectYourPlanStyle.subTitle} variant='body2' color={'inherit'}>
+                  ${card.quotePerTime}/{userData.quoteTime === 'monthly' ? 'mo': 'year'}
+                </Typography>
+                <Typography sx={{...StepSelectYourPlanStyle.title, color: marineBlue, fontSize:'12px'}} variant='body2' color={'inherit'}>
+                  {userData.quoteTime === 'yearly' ? '2 months free' : ''}
+                </Typography>
+              </Box>
+            </Box>
+            )})
+          
+        }
+      </Box>
+
+      <Box sx={StepSelectYourPlanStyle.switchBox}>
+        <Typography sx={{...StepSelectYourPlanStyle.title, fontSize:'16px', width:'auto'}}  variant='subtitle1'>
+          Monthly
+        </Typography>
+        <Switch
+          checked={checked}
+          onChange={handleChange}
+          inputProps={{ 'aria-label': 'controlled' }}
+          sx={{
+            '& .MuiSwitch-thumb': {
+              color: white,
+              backgroundColor: marineBlue,
+            },
+            '& .MuiSwitch-track': {
+              backgroundColor: marineBlue,
+            },
+          }}
+        />
+        <Typography sx={{...StepSelectYourPlanStyle.title, fontSize:'16px', width:'auto'}}  variant='subtitle1'>
+          Yearly
+        </Typography>
+      </Box>
+
+      <Box sx={StepSelectYourPlanStyle.buttonConteiner}>
+        <Button sx={StepSelectYourPlanStyle.buttonBack} onClick={()=> toGoBack()} variant='text'>Go Back</Button>
+        <Button sx={StepSelectYourPlanStyle.buttonNext} type="submit" variant='contained'>Next Step</Button>
       </Box>
       </form>
     </Box>
