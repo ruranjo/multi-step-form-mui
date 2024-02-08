@@ -132,7 +132,7 @@ const StepPickAddOns:React.FC<Props> = ({setCurrentStep, userData, setUserData})
       quotePerTime: userData.quoteTime === 'monthly' ? quoteTimeData.montly.customizable : quoteTimeData.yearly.customizable,
     },
   ]
-
+  
   const handleChange = (pick:string) => {
     if(pick === pickAddOns[0].title){//title:'Online service'
       setUserData({...userData, hasOnlineService : !userData.hasOnlineService});

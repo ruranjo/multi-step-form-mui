@@ -1,7 +1,7 @@
 import { SxProps, Typography } from '@mui/material';
 import { Box, Container } from '@mui/system';
 import { alabaster,black, pastelBlue, white } from './styles/variables';
-import { bgSidebarDesktop } from './utils/assets';
+import { bgSidebarDesktop, bgSidebarMobile } from './utils/assets';
 import { useState } from 'react';
 import { StepPersonalInformation, StepSelectYourPlan, StepFinishingUp, StepPickAddOns} from './pages/Steps';
 import { UserData } from './interfaces/userdata.inteface';
@@ -15,6 +15,7 @@ export interface styledMultiStepForm {
   sidebarBox: SxProps;
   steps: SxProps;
   iconNumberSidebar:SxProps;
+  textMenu:SxProps;
 }
 
 const appStyle: styledMultiStepForm = {
@@ -25,50 +26,75 @@ const appStyle: styledMultiStepForm = {
       alignContent:'center',
       width:'100%',
       height:'100vh',
-      '@media screen and (max-width: 870px)': {
-        
+      '@media screen and (max-width: 440px)': {
+        height:'auto',
       },
     },
     boxStyle:{
+      position:'relative',
+      //border:'1px solid red',
       padding:'1rem',
       display: 'flex',
       justifyContent:'space-between',
+      borderRadius:'10px',
       width:'70%',
       minWidth:'500px',
       height:'70%',
-      border:'1px solid red',
       backgroundColor: alabaster,
       '@media screen and (max-width: 440px)': {
-        flexDirection:'column'
+        flexDirection:'column',
+        height:'100%',
+        width:'100%',
       },
     },
     sidebar:{
+      //border:'1px solid purple',
       backgroundImage: `url(${bgSidebarDesktop})`, // Ruta de tu archivo SVG
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center',
-      border:'1px solid purple',
+      borderRadius:'10px',
       width:'30%',
-      
+      '@media screen and (max-width: 440px)': {
+        backgroundImage: `url(${bgSidebarMobile})`,
+        width:'100%',
+        height:'200px'
+      },
     },
     sidebarBoxContainer:{
-      
+      //border:'1px solid yellow',
       display:'flex',
       gap:'2rem',
       flexDirection:'column',
+      
       marginTop:'2rem',
       marginLeft:'2rem',
       color:white,
+      '@media screen and (max-width: 440px)': {
+        marginTop:'0',
+        marginLeft:'0',
+        height:'100%',
+        flexDirection:'row',
+        justifyContent:'center',
+        alignItems:'center',
+        gap:'1rem',
+      },
     },
 
     sidebarBox:{
-      
+      //border:'1px solid red',
       display:'flex',
       gap:'1rem',
       alignItems:'center',
+      
       color:white,
+      '@media screen and (max-width: 440px)': {
+        flexDirection:'row',
+        height:'auto',
+      },
     },
     iconNumberSidebar:{
+      
       border:'1px solid white',
       borderRadius:'50%',
       display:'flex',
@@ -79,10 +105,21 @@ const appStyle: styledMultiStepForm = {
       color:white,
     },
     steps:{
-      border:'1px solid tomato',
-      
+      display:'flex',
+      alignItems:'center',
+      justifyContent:'center',
+      //border:'1px solid tomato',
       width:'70%',
+      '@media screen and (max-width: 440px)': {
+        height:'100%',  
+        width:'90%',
+      },
     },
+    textMenu:{
+      '@media screen and (max-width: 440px)': {
+        display:'none',
+      },
+    }
   }
 
   const progressSteps = [
@@ -117,7 +154,7 @@ const appStyle: styledMultiStepForm = {
   }
 
 const App:React.FC<{}> = () => {
-  const [currentStep, setCurrentStep]  = useState(progressSteps[1].stepNumber);
+  const [currentStep, setCurrentStep]  = useState(progressSteps[3].stepNumber);
   
   const [userData, setUserData]  = useState<UserData>(initialStatUserData); 
 
@@ -134,7 +171,7 @@ const App:React.FC<{}> = () => {
                     <Box sx={ currentStep === step.stepNumber ? {...appStyle.iconNumberSidebar, color: black, backgroundColor: pastelBlue} : appStyle.iconNumberSidebar}>
                       <Typography variant='body2' fontWeight={'600'} color={'inherit'}>{step.stepNumber}</Typography>
                     </Box>
-                    <Box color={'inherit'}>
+                    <Box  sx={appStyle.textMenu} color={'inherit'}>
                       <Typography  sx={{opacity:0.5}} variant='body2' fontWeight={'100'} color={'inherit'} >STEP {step.stepNumber}</Typography>
                       <Typography variant='body2' fontWeight={'600'} color={'inherit'}>{step.title}</Typography>
                     </Box>
@@ -155,7 +192,7 @@ const App:React.FC<{}> = () => {
               currentStep === progressSteps[2].stepNumber && <StepPickAddOns setCurrentStep={setCurrentStep}  userData={userData} setUserData={setUserData} />
             }
             {
-              currentStep === progressSteps[3].stepNumber && <StepFinishingUp setCurrentStep={setCurrentStep} />
+              currentStep === progressSteps[3].stepNumber && <StepFinishingUp setCurrentStep={setCurrentStep} userData={userData}/>
             }
           </Box>
         </Box>
