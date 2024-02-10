@@ -154,7 +154,7 @@ const appStyle: styledMultiStepForm = {
   }
 
 const App:React.FC<{}> = () => {
-  const [currentStep, setCurrentStep]  = useState(progressSteps[3].stepNumber);
+  const [currentStep, setCurrentStep]  = useState(progressSteps[0].stepNumber);
   
   const [userData, setUserData]  = useState<UserData>(initialStatUserData); 
 
